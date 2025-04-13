@@ -16,23 +16,12 @@ The **OPAC** retrieves records from these tables through SQL queries, while the 
 ## Step-by-Step Setup
 
 ### 1. Establishing Database Connection
-The following Python snippet demonstrates how to establish a connection to a MySQL database using `mysql-connector-python`:
+In order to understand the relationship bewtween everything I needed to create a visual. 
 
-```python
-import mysql.connector
+<img width="341" alt="Screen Shot 2025-04-12 at 8 19 43 PM" src="https://github.com/user-attachments/assets/2e152f45-28ec-4c72-8ddb-dcf930ca1f08" />
 
-def connect_to_db():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="yourpassword",
-        database="library_db"
-    )
+SQL supports the OPACDB database by helping store, manage, and access book information. The Books table contains details like author, title, publisher, and publication year. SQL lets users search and filter this data using specific criteria. This makes the OPAC system fast and easy to use. Overall, SQL helps deliver accurate and useful search results.
 
-conn = connect_to_db()
-cursor = conn.cursor()
-print("Database connection established.")
-```
 
 ### 2. Cataloging Module: Adding Records
 The cataloging module allows librarians to add new books to the database:
@@ -50,7 +39,8 @@ add_book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565", 1925, "Fict
 ### 3. OPAC Search and Retrieval
 A basic function for searching books based on title:
 
-```python
+```
+python
 def search_books(title):
     query = "SELECT * FROM Books WHERE title LIKE %s"
     cursor.execute(query, ("%" + title + "%",))
@@ -69,22 +59,38 @@ To make the OPAC and cataloging module more realistic, consider:
 - **User-Friendly Interface**: Creating a web-based or GUI application for interaction.
 
 ### 5. Configuration Steps
-- Install dependencies: `pip install mysql-connector-python`
-- Set up the database schema:
 
-```sql
-CREATE DATABASE library_db;
-USE library_db;
+- Set up searchable book database using SQL
+  
+```
+CREATE DATABASE opacdb;
+USE opacdb;
 
-CREATE TABLE Books (
-    book_id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    ISBN VARCHAR(13) UNIQUE NOT NULL,
-    publication_year INT,
-    subject VARCHAR(255)
+mysql> create table books (
+        id int unsigned not null auto_increment,
+        author varchar(150) not null,
+        title varchar(150) not null,
+        copyright year(4) not null,
+        primary key (ID)
 );
 ```
+In order to confirm a table has been created use 
+```
+
+mysql> show tables;
+mysql> describe books;
+```
+To add new titles to the books table
+
+```
+mysql> insert into books (author, title, copyright) values
+('Jennifer Egan', 'The Candy House', '2022');
+
+```
+
+
+
+
 
 ## Key Details
 - **Primary Keys**: Ensure `book_id` and `author_id` use `AUTO_INCREMENT`.
@@ -97,12 +103,13 @@ To build this module, documentation from the following sources was referenced:
 - **Python MySQL Connector Docs** for database interaction.
 - **Flask/Python Web Development Resources** for enhancing OPAC.
 
-### Addressing Gaps
-While setting up, some gaps in understanding included:
-- Handling SQL injection risks → Solution: Use parameterized queries.
-- Ensuring data consistency → Solution: Define constraints in the database schema.
+### Challenges
 
 ## Links to Site
 •	Your OPAC page on your Ubuntu server.
 
+http://34.29.1.232/mylibrary.html
+
 •	Your cataloging module on your Ubuntu server.
+
+http://34.29.1.232/index.html
